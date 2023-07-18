@@ -1,0 +1,57 @@
+﻿@model List<HotelPrices.Models.DTO.HotelDTO>
+
+<h2 style="margin-top: 20px; margin-bottom: 20px;">Pesquisar Preços de Hotel</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<form asp-controller="Home" asp-action="Search" method="post">
+    <label for="checkIn">Check-In:</label>
+    <input type="date" id="checkIn" name="checkIn" required>
+
+    <label for="checkOut">Check-Out:</label>
+    <input type="date" id="checkOut" name="checkOut" required>
+
+    <label for="adults">Adultos:</label>
+    <select id="adults" name="adults" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+
+    <button type="submit">Pesquisar</button>
+</form>
+
+@if (Model != null && Model.Count > 0)
+{
+    <h3 style="margin-top: 20px; margin-bottom: 20px;">Resultados da pesquisa:</h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Nome do Quarto</th>
+                    <th scope="col" class="text-center">Máximo de Adultos</th>
+                    <th scope="col" class="text-center">Condição</th>
+                    <th scope="col" class="text-center">Valor Médio por Noite</th>
+                    <th scope="col" class="text-center">Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hotelPrice in Model)
+                {
+                    <tr>
+                        <td>@hotelPrice.RoomName</td>
+                        <td class="text-center">@hotelPrice.MaxAdults</td>
+                        <td class="text-center">@hotelPrice.Condition</td>
+                        <td class="text-center">R$ @hotelPrice.AveragePricePerNight.ToString("0.00")</td>
+                        <td class="text-center">R$ @hotelPrice.TotalPrice.ToString("0.00")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
